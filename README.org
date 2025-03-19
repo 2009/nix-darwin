@@ -1,0 +1,61 @@
+* Setup
+
+This repo uses nix flakes to manager the system and home directory using `nix-darwin` and `home-manger`.
+
+** Installing Nix
+
+There are a number of third-party installers that have better handling of MacOS upgrades.
+
+https://github.com/DeterminateSystems/nix-installer
+
+#+BEGIN_SRC sh
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
+  sh -s -- install
+#+END_SRC
+
+** After initial install
+*** Create the ~/.nvm directory
+
+This is needed for the nvm to install correctly with brew:
+
+#+BEGIN_SRC sh
+mkdir ~/.nvm
+#+END_SRC
+
+** Emacs
+
+There are a number of MacOS builds that have better compatilbility with doom, these require an additional step to create
+~/Applictions/Emacs.app~.
+
+Run `src_sh{brew info emacs-plus}` and follow the instruction to use oascript to create Emacs.app in /Applications.
+
+*** Setup doom
+
+#+BEGIN_SRC sh
+~/.config/emacs/bin/doom install
+~/.config/emacs/bin/doom doctor
+~/.config/emacs/bin/doom sync
+#+END_SRC
+
+*** Doom fonts
+
+From Emacs run:
+
+#+BEGIN_SRC eslisp
+nerd-icons-install-fonts
+#+END_SRC
+
+* Regular Maintenance
+
+** Updating
+
+In the directory with the .flake file, run: `nix flake update`
+
+*** TODO: instruction on darwin-rebuild
+
+** Removing unreferenced packages and old generations
+
+#+BEGIN_SRC sh
+nix-collect-garbage -d
+sudo nix-collect-garbage -d
+#+END_SRC
