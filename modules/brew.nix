@@ -1,14 +1,14 @@
 { config, ... }:
 
 {
-  #homebrew packages
+  # homebrew packages
   homebrew = {
     enable = true;
     onActivation.autoUpdate = true;
     onActivation.upgrade = true;
     #onActivation.cleanup = "zap"; # Uncomment this if you want all brew packages not defined in this file to be removed when updated
     brews = [
-      #"mas" # AppStore cli
+      "mas" # AppStore cli
 
       #{
       #  name = "emacs-mac";
@@ -19,9 +19,9 @@
 
       {
         name = "emacs-plus";
-	# NOTE: changes to args require manual uninstall to force a rebuild
+        # NOTE: changes to args require manual uninstall to force a rebuild
         #args = [ "with-native-compilation" ];
-	link = true;
+        link = true;
       }
 
       # doom deps
@@ -58,6 +58,7 @@
     masApps = {
       #"WiFi Explorer" = 494803304;
       #"Okta Extension App" = 1439967473;
+      "AnkiApp Flashcards" = 689185915;
     };
   };
 }
