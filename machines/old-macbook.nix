@@ -61,6 +61,9 @@ in {
     pkgs.fontconfig
     pkgs.coreutils-prefixed # gls
 
+    # doom nix
+    pkgs.nixfmt-rfc-style
+
     # doom golang
     pkgs.gopls
     pkgs.gomodifytags
@@ -79,6 +82,9 @@ in {
     
     # doom roam
     pkgs.graphviz # roam graph visualisation
+
+    # doom markdown
+    pkgs.pandoc
 
     pkgs.bat
 
