@@ -53,7 +53,7 @@
 
       # Do not display a line previously found in the history file
       # TODO: how does this work exactly?
-      findNoDups = false;
+      findNoDups = true;
 
       # If a new command line being added to the history list duplicates an older one,
       # the older command is removed from the list (even if it is not the previous event)
@@ -66,7 +66,7 @@
       share = true;
 
       # Number of history lines to save
-      save = 10000;
+      save = 100000;
     };
 
     # TODO: historySubstringSearch to configure vim up and down in history
