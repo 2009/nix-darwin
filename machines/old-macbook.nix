@@ -1,9 +1,15 @@
-{ pkgs, lib, config, home-manager, ... }:
-
+{
+  pkgs,
+  lib,
+  config,
+  home-manager,
+  ...
+}:
 
 let
   username = "jendacott";
-in {
+in
+{
   imports = [
     ../modules/brew.nix
     #../roles/m1.nix
@@ -39,7 +45,7 @@ in {
   # Set hostname
   #networking.hostName = "${hostname}";
 
-  # Always show menu bar on M2 Macbook Air 
+  # Always show menu bar on M2 Macbook Air
   #system.defaults.NSGlobalDomain._HIHideMenuBar = lib.mkForce false;
 
   # ----------------------------
@@ -47,8 +53,8 @@ in {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   # FIXME this does not work
-  environment.systemPackages =
-  [ pkgs.vim
+  environment.systemPackages = [
+    pkgs.vim
 
     # TODO try these and pick one
     #pkgs.ghostty # Broken, using brew
@@ -79,7 +85,7 @@ in {
 
     # doom org
     pkgs.pngpaste # paste image from MacOS clipboard
-    
+
     # doom roam
     pkgs.graphviz # roam graph visualisation
 
@@ -93,20 +99,20 @@ in {
 
     pkgs.fasd
   ];
-  
+
   # Necessary for using flakes on this system.
   nix.settings.experimental-features = "nix-command flakes";
-  
+
   # Enable alternative shell support in nix-darwin.
   # programs.fish.enable = true;
-  
+
   # Set Git commit hash for darwin-version.
   #system.configurationRevision = self.rev or self.dirtyRev or null;
-  
+
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
   system.stateVersion = 6;
-  
+
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "x86_64-darwin";
 }
