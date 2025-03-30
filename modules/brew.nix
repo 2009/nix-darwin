@@ -35,7 +35,6 @@
 
       "awscli"
 
-      "fzf"
       #"editorconfig"
     ];
     extraConfig = ''

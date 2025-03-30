@@ -3,6 +3,7 @@
 
   imports = [
     ./zsh/p10k.nix
+    ./zsh/fzf.nix
   ];
 
   # TODO: y to confirm for rm commands
@@ -99,13 +100,6 @@
       #  }
     ];
 
-    shellAliases = {
-      ll = "ls -la";
-      gs = "git status";
-      gcm = "git commit -m";
-      gco = "git checkout";
-    };
-
     # Similar to shellAliases, but are substituted anywhere on a line
     # TODO: could be useful
     #shellGlobalAliases = {
@@ -131,6 +125,14 @@
 
     # TODO checkout Mac Dash.app and opening man pages in it
 
+    shellAliases = {
+      ls = "ls --color";
+      ll = "ls -la";
+      gst = "git status";
+      gcm = "git commit -m";
+      gco = "git checkout";
+    };
+
     # Better aliases
     # TODO: try this
     zsh-abbr = {
@@ -142,11 +144,4 @@
       };
     };
   };
-
-  # TODO: do I need to install these?
-  #home.packages = with pkgs; [
-  #  zsh
-  #  zsh-autosuggestions
-  #  zsh-syntax-highlighting
-  #];
 }
