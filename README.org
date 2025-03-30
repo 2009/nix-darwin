@@ -46,6 +46,11 @@ nerd-icons-install-fonts
 #+END_SRC
 
 * Regular Maintenance
+** Making changes (new files)
+
+Any new files added to the nix config must be staged before running `darin-rebuild switch --flake .#old-macbook`, this is because:
+
+[[https://nixos.wiki/wiki/Flakes#Git_WARNING][For flakes in git repos, only files in the working tree will be copied to the store.]]
 
 ** Updating
 
