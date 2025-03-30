@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
 
   imports = [
     ./zsh/p10k.nix
@@ -22,7 +23,7 @@
     # https://github.com/zsh-users/zsh-autosuggestions#usage
     autosuggestion = {
       enable = true;
-      strategy = ["history"];
+      strategy = [ "history" ];
     };
 
     # TODO: custom patterns https://nix-community.github.io/home-manager/options.xhtml#opt-programs.zsh.syntaxHighlighting.patterns
@@ -34,15 +35,15 @@
     # An attribute set that adds to named directory hash table
     # i.e. `cd ~docs`, `ls ~dls`
     dirHashes = {
-      docs  = "$HOME/Documents";
-      dls   = "$HOME/Downloads";
+      docs = "$HOME/Documents";
+      dls = "$HOME/Downloads";
     };
 
     # "emacs", "vicmd" or "viins"
     # https://github.com/rothgar/mastering-zsh/blob/master/docs/usage/line_movement.md
     # TODO: try this modes
     #defaultKeymap = "vicmd";
-  
+
     history = {
       append = true;
       # TODO: confirm how this works, is it needed when we don't save duplicates?
@@ -76,26 +77,26 @@
 
     # TODO: check out enhancd https://github.com/babarot/enhancd
     plugins = [
-    #  {
-    #    # will source zsh-autosuggestions.plugin.zsh
-    #    name = "zsh-autosuggestions";
-    #    src = pkgs.fetchFromGitHub {
-    #      owner = "zsh-users";
-    #      repo = "zsh-autosuggestions";
-    #      rev = "v0.4.0";
-    #      sha256 = "0z6i9wjjklb4lvr7zjhbphibsyx51psv50gm07mbb0kj9058j6kc";
-    #    };
-    #  }
-    #  {
-    #    name = "enhancd";
-    #    file = "init.sh";
-    #    src = pkgs.fetchFromGitHub {
-    #      owner = "b4b4r07";
-    #      repo = "enhancd";
-    #      rev = "v2.2.1";
-    #      sha256 = "0iqa9j09fwm6nj5rpip87x3hnvbbz9w9ajgm6wkrd5fls8fn8i5g";
-    #    };
-    #  }
+      #  {
+      #    # will source zsh-autosuggestions.plugin.zsh
+      #    name = "zsh-autosuggestions";
+      #    src = pkgs.fetchFromGitHub {
+      #      owner = "zsh-users";
+      #      repo = "zsh-autosuggestions";
+      #      rev = "v0.4.0";
+      #      sha256 = "0z6i9wjjklb4lvr7zjhbphibsyx51psv50gm07mbb0kj9058j6kc";
+      #    };
+      #  }
+      #  {
+      #    name = "enhancd";
+      #    file = "init.sh";
+      #    src = pkgs.fetchFromGitHub {
+      #      owner = "b4b4r07";
+      #      repo = "enhancd";
+      #      rev = "v2.2.1";
+      #      sha256 = "0iqa9j09fwm6nj5rpip87x3hnvbbz9w9ajgm6wkrd5fls8fn8i5g";
+      #    };
+      #  }
     ];
 
     shellAliases = {
@@ -119,6 +120,13 @@
       export NVM_DIR="$HOME/.nvm"
       [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
       [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+      # Load goenv
+      export GOENV_ROOT="$HOME/.goenv"
+      export PATH="$GOENV_ROOT/bin:$PATH"
+      eval "$(goenv init -)"
+      export PATH="$GOROOT/bin:$PATH"
+      export PATH="$PATH:$GOPATH/bin"
     '';
 
     # TODO checkout Mac Dash.app and opening man pages in it
