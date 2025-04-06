@@ -27,7 +27,6 @@
 
       # Preview directory contents when completing cd
       zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-
     '';
 
     plugins = [

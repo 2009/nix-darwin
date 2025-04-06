@@ -42,18 +42,15 @@
 
     # "emacs", "vicmd" or "viins"
     # https://github.com/rothgar/mastering-zsh/blob/master/docs/usage/line_movement.md
-    # TODO: try this modes
-    #defaultKeymap = "vicmd";
+    # Print keybindings with: `bindkey` or `bindkey -M <keymap>`
+    defaultKeymap = "emacs";
 
     history = {
       append = true;
-      # TODO: confirm how this works, is it needed when we don't save duplicates?
-      # FIXME: sometimes history is removed without hitting enter?
       expireDuplicatesFirst = true;
       extended = true; # include timestamps
 
       # Do not display a line previously found in the history file
-      # TODO: how does this work exactly?
       findNoDups = true;
 
       # If a new command line being added to the history list duplicates an older one,
@@ -107,9 +104,28 @@
     #  G = "| grep";
     #};
 
-    # TODO change emacs so it does not add text that is removed by ci"
+    # TODO change emacs so it does not add text to paste history that is removed by ci"
+
+    # TODO ctrl+l clears screen and by default ctrl+j enters a command, what sets these?
+    # TODO consider using something similar to ctrl+j instead of enter?
 
     initExtra = ''
+      export EDITOR=vim
+
+      # Edit promt command in editor
+      autoload -Uz edit-command-line
+      zle -N edit-command-line
+      bindkey '^X^E' edit-command-line
+
+      # Search matching command only
+      # TODO: test substring search to see if it is better than this or oh-my-zsh behaviour
+      #bindkey '^k' history-search-forward
+      #bindkey '^j' history-search-backward
+
+      # Search any part of command string
+      bindkey '^k' history-substring-search-up
+      bindkey '^j' history-substring-search-down
+
       # Load NVM and make it available
       export NVM_DIR="$HOME/.nvm"
       [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
