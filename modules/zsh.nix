@@ -17,10 +17,6 @@
     # zsh tab completion for nix commands
     enableCompletion = true;
 
-    # TODO: fuzzy tab completion https://superuser.com/questions/415650/does-a-fuzzy-matching-mode-exist-for-the-zsh-shell
-
-    # FIXME: this is making tab completion funky
-    # TODO: decide if we want suggstions or integrate with tab completion
     # https://github.com/zsh-users/zsh-autosuggestions#usage
     autosuggestion = {
       enable = true;
@@ -108,6 +104,9 @@
 
     # TODO ctrl+l clears screen and by default ctrl+j enters a command, what sets these?
     # TODO consider using something similar to ctrl+j instead of enter?
+
+    # TODO TODO learn zsh keybingings for deleting words, moving backwards are forwards (without left/right)
+    # both single character and word, also copy and posting (i.e. to move a flag to the end of a command)
 
     initExtra = ''
       export EDITOR=vim

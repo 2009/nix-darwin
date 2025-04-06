@@ -52,14 +52,8 @@ in
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-  # FIXME this does not work
   environment.systemPackages = [
     pkgs.vim
-
-    # TODO try these and pick one
-    #pkgs.ghostty # Broken, using brew
-    #pkgs.alacritty
-    #pkgs.kitty
 
     # doom deps
     #pkgs.ripgrep
