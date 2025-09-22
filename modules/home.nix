@@ -2,6 +2,7 @@
 
   imports = [
     ./zsh.nix
+    ./aerospace.nix
   ];
 
   # Home Manager version

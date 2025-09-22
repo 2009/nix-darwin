@@ -71,16 +71,20 @@
 
     # TODO: check out enhancd https://github.com/babarot/enhancd
     plugins = [
-      #  {
-      #    # will source zsh-autosuggestions.plugin.zsh
-      #    name = "zsh-autosuggestions";
-      #    src = pkgs.fetchFromGitHub {
-      #      owner = "zsh-users";
-      #      repo = "zsh-autosuggestions";
-      #      rev = "v0.4.0";
-      #      sha256 = "0z6i9wjjklb4lvr7zjhbphibsyx51psv50gm07mbb0kj9058j6kc";
-      #    };
-      #  }
+      {
+        # will source zsh-nvm-lazy-load.plugin.zsh
+	# This will lazy load nvm to fix problems with com.crowdstrike.falcon.Agent
+        # causing nvm and goenv to run really slow
+	# TODO: try an alternative to nvm i.e. fnm
+	# TODO: lazy load goenv
+        name = "zsh-nvm-lazy-load";
+        src = pkgs.fetchFromGitHub {
+          owner = "undg";
+          repo = "zsh-nvm-lazy-load";
+          rev = "master";
+          sha256 = "/WLGwPDEpjA/Qef5ZxUzGJyLVMtNIMvYJKWx3KG9xjI=";
+        };
+      }
       #  {
       #    name = "enhancd";
       #    file = "init.sh";
@@ -126,16 +130,23 @@
       bindkey '^j' history-substring-search-down
 
       # Load NVM and make it available
+      # TODO: make this unique per machine
       export NVM_DIR="$HOME/.nvm"
-      [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-      [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+      #[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+      #[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+      #[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+      #[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
+      # TODO: this is really slow on the work laptop
       # Load goenv
-      export GOENV_ROOT="$HOME/.goenv"
-      export PATH="$GOENV_ROOT/bin:$PATH"
-      eval "$(goenv init -)"
-      export PATH="$GOROOT/bin:$PATH"
-      export PATH="$PATH:$GOPATH/bin"
+      #export GOENV_ROOT="$HOME/.goenv"
+      #export PATH="$GOENV_ROOT/bin:$PATH"
+      #eval "$(goenv init -)"
+      #export PATH="$GOROOT/bin:$PATH"
+      #export PATH="$PATH:$GOPATH/bin"
+
+      # Load rbenv
+      eval "$(rbenv init - zsh)"
     '';
 
     # TODO checkout Mac Dash.app and opening man pages in it
@@ -143,7 +154,7 @@
     shellAliases = {
       ls = "ls --color";
       ll = "ls -la";
-      gst = "git status";
+      #gst = "git status";
       gcm = "git commit -m";
       gco = "git checkout";
     };
@@ -155,6 +166,7 @@
       abbreviations = {
         gco = "git checkout";
         gst = "git status";
+        gd = "git diff";
         l = "less";
       };
     };

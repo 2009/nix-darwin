@@ -2,16 +2,42 @@
 
 This repo uses nix flakes to manager the system and home directory using `nix-darwin` and `home-manger`.
 
+#+BEGIN_SRC sh
+git clone git@github.com:2009/nix-darwin.git ~/.config/nix-darwin
+#+END_SRC
+
 ** Installing Nix
 
 There are a number of third-party installers that have better handling of MacOS upgrades.
 
 https://github.com/DeterminateSystems/nix-installer
 
+Select "No" to install vanilla nix:
+
 #+BEGIN_SRC sh
 curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
   sh -s -- install
 #+END_SRC
+
+** Bootstrap and install nix-darwin
+
+https://github.com/nix-darwin/nix-darwin#step-2-installing-nix-darwin
+
+#+BEGIN_SRC sh
+# To use Nixpkgs unstable:
+nix run nix-darwin/master#darwin-rebuild -- switch --flake .#smar
+# To use Nixpkgs 24.11:
+nix run nix-darwin/nix-darwin-24.11#darwin-rebuild -- switch --flake .#smar
+#+END_SRC
+
+** Flake Install
+
+Install the flake matching the machine to be setup:
+
+#+BEGIN_SRC sh
+darwin-rebuild build --flake .#old-macbook
+#+END_SRC
+
 
 ** After initial install
 *** Create the ~/.nvm directory
@@ -63,4 +89,14 @@ In the directory with the .flake file, run: `nix flake update`
 #+BEGIN_SRC sh
 nix-collect-garbage -d
 sudo nix-collect-garbage -d
+#+END_SRC
+
+* Common Issues
+** SSL Issues during nix-darwin install
+
+https://discourse.nixos.org/t/ssl-ca-cert-error-on-macos/31171/5
+
+#+BEGIN_SRC sh
+sudo rm /etc/ssl/certs/ca-certificates.crt
+sudo ln -s /nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt /etc/ssl/certs/ca-certificates.crt
 #+END_SRC

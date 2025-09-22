@@ -8,10 +8,12 @@
 
 let
   username = "jendacott";
+  homeDir = "/Users/${username}";
+  sourceDir = "${homeDir}/.config/nix-darwin";
 in
 {
   imports = [
-    ../modules/brew.nix
+    ./default.nix
     #../roles/m1.nix
     #../roles/defaults.nix
     #../roles/brew.nix
@@ -21,23 +23,16 @@ in
   ];
 
   # Set the nix-darwin config directory
-  environment.etc."nix-darwin".source = "/Users/${username}/.config/nix-darwin";
+  environment.etc."nix-darwin".source = sourceDir;
 
   # Define user settings
   users.users.${username} = {
     description = "Tintin";
-    home = "/Users/${username}"; # needed for home-manager to work
+    home = homeDir; # needed for home-manager to work
 
     # set users default shell
     shell = pkgs.zsh;
   };
-
-  # zsh autocompletions for system packages
-  # TODO: test this
-  environment.pathsToLink = [ "/share/zsh" ];
-
-  # use pkgs configured by nix-darwin
-  home-manager.useGlobalPkgs = true;
 
   # Set home-manager configs for username
   home-manager.users.${username} = import ../modules/home.nix;
@@ -52,53 +47,7 @@ in
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-  environment.systemPackages = [
-    pkgs.vim
-
-    # doom deps
-    #pkgs.ripgrep
-    #pkgs.fd
-    pkgs.fontconfig
-    pkgs.coreutils-prefixed # gls
-
-    # doom nix
-    pkgs.nixfmt-rfc-style
-
-    # doom golang
-    pkgs.gopls
-    pkgs.gomodifytags
-    pkgs.gotests
-    pkgs.gore
-
-    # doom sh
-    pkgs.shfmt
-    pkgs.shellcheck
-
-    # doom docker
-    pkgs.dockfmt
-
-    # doom org
-    pkgs.pngpaste # paste image from MacOS clipboard
-
-    # doom roam
-    pkgs.graphviz # roam graph visualisation
-
-    # doom markdown
-    pkgs.pandoc
-
-    pkgs.bat
-
-    pkgs.source-code-pro
-    pkgs.font-awesome
-
-    pkgs.fasd
-  ];
-
-  # Necessary for using flakes on this system.
-  nix.settings.experimental-features = "nix-command flakes";
-
-  # Enable alternative shell support in nix-darwin.
-  # programs.fish.enable = true;
+  environment.systemPackages = [ ];
 
   # Set Git commit hash for darwin-version.
   #system.configurationRevision = self.rev or self.dirtyRev or null;

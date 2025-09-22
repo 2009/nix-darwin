@@ -20,18 +20,18 @@
       {
         name = "emacs-plus";
         # NOTE: changes to args require manual uninstall to force a rebuild
-        #args = [ "with-native-compilation" ];
+        args = [ "with-native-comp" ];
         link = true;
       }
-
-      # doom deps
-      "ripgrep"
-      "fd"
 
       "tfenv"
       "tgenv"
       "goenv"
-      "nvm"
+      #"nvm"
+      "volta"
+
+      "rbenv"
+      "ruby-build"
 
       "awscli"
 
@@ -50,7 +50,10 @@
       "alacritty"
       "ghostty"
 
-      "docker"
+      "google-cloud-sdk"
+
+      # managed by Self Service
+      #"docker"
     ];
 
     # AppStore applications

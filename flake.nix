@@ -25,7 +25,7 @@
       system.stateVersion = 6;
 
       # The platform the configuration will be used on.
-      nixpkgs.hostPlatform = "x86_64-darwin";
+      #nixpkgs.hostPlatform = "x86_64-darwin";
 
       # Allow unfree packages to be installed
       nixpkgs.config.allowUnfree = true;
@@ -38,6 +38,16 @@
       modules = [
         configuration
         ./machines/old-macbook.nix
+        home-manager.darwinModules.home-manager
+      ];
+    };
+
+    # Build darwin flake using:
+    # $ darwin-rebuild build --flake .#smar
+    darwinConfigurations."smar" = nix-darwin.lib.darwinSystem {
+      modules = [
+        configuration
+        ./machines/smar.nix
         home-manager.darwinModules.home-manager
       ];
     };
