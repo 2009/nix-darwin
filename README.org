@@ -53,7 +53,7 @@ mkdir ~/.nvm
 There are a number of MacOS builds that have better compatilbility with doom, these require an additional step to create
 ~/Applictions/Emacs.app~.
 
-Run `src_sh{brew info emacs-plus}` and follow the instruction to use oascript to create Emacs.app in /Applications.
+Run `src_sh{brew info emacs-plus}` and follow the instruction to use oascript to create Emacs.app in /Applications. NOTE for work laptops install into ~/Users/<username>/Applications~.
 
 *** Setup doom
 

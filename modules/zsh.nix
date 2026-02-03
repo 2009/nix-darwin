@@ -71,20 +71,20 @@
 
     # TODO: check out enhancd https://github.com/babarot/enhancd
     plugins = [
-      {
-        # will source zsh-nvm-lazy-load.plugin.zsh
-	# This will lazy load nvm to fix problems with com.crowdstrike.falcon.Agent
-        # causing nvm and goenv to run really slow
-	# TODO: try an alternative to nvm i.e. fnm
-	# TODO: lazy load goenv
-        name = "zsh-nvm-lazy-load";
-        src = pkgs.fetchFromGitHub {
-          owner = "undg";
-          repo = "zsh-nvm-lazy-load";
-          rev = "master";
-          sha256 = "/WLGwPDEpjA/Qef5ZxUzGJyLVMtNIMvYJKWx3KG9xjI=";
-        };
-      }
+      #{
+      #  # will source zsh-nvm-lazy-load.plugin.zsh
+      #  # This will lazy load nvm to fix problems with com.crowdstrike.falcon.Agent
+      #  # causing nvm and goenv to run really slow
+      #  # TODO: try an alternative to nvm i.e. fnm
+      #  # TODO: lazy load goenv
+      #  name = "zsh-nvm-lazy-load";
+      #  src = pkgs.fetchFromGitHub {
+      #    owner = "undg";
+      #    repo = "zsh-nvm-lazy-load";
+      #    rev = "master";
+      #    sha256 = "/WLGwPDEpjA/Qef5ZxUzGJyLVMtNIMvYJKWx3KG9xjI=";
+      #  };
+      #}
       #  {
       #    name = "enhancd";
       #    file = "init.sh";
@@ -129,9 +129,13 @@
       bindkey '^k' history-substring-search-up
       bindkey '^j' history-substring-search-down
 
+      # Volta
+      export VOLTA_HOME=$HOME/.volta
+      export PATH=$PATH:$VOLTA_HOME/bin
+
       # Load NVM and make it available
       # TODO: make this unique per machine
-      export NVM_DIR="$HOME/.nvm"
+      #export NVM_DIR="$HOME/.nvm"
       #[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
       #[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
       #[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm

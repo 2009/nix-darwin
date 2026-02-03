@@ -15,7 +15,7 @@
       #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
       gaps = {
         inner.horizontal = 0;
-        inner.vertical =   0;
+        inner.vertical = 0;
         outer.left = 8;
         outer.bottom = 8;
         outer.top = 8;
@@ -51,33 +51,34 @@
         # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
         # You can uncomment the following lines to open up terminal with alt + enter shortcut
         # (like in i3)
-        alt-enter = ''exec-and-forget osascript -e "
-          tell application "Ghostty"
-             do script
-             activate
-          end tell"
+        alt-enter = ''
+          exec-and-forget /Applications/Ghostty.app/Contents/MacOS/ghostty"
+        '';
+
+        alt-shift-r = ''
+          exec-and-forget /Applications/Ghostty.app/Contents/MacOS/ghostty --title="Launcher" -e "launcher"
         '';
 
         # See: https://nikitabobko.github.io/AeroSpace/commands#layout
         alt-slash = "layout tiles horizontal vertical";
         alt-comma = "layout accordion horizontal vertical";
-    
+
         # See: https://nikitabobko.github.io/AeroSpace/commands#focus
         alt-h = "focus left";
         alt-j = "focus down";
         alt-k = "focus up";
         alt-l = "focus right";
-    
+
         # See: https://nikitabobko.github.io/AeroSpace/commands#move
         alt-shift-h = "move left";
         alt-shift-j = "move down";
         alt-shift-k = "move up";
         alt-shift-l = "move right";
-    
+
         # See: https://nikitabobko.github.io/AeroSpace/commands#resize
         alt-minus = "resize smart -50";
         alt-equal = "resize smart +50";
-    
+
         # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
         alt-1 = "workspace 1";
         alt-2 = "workspace 2";
@@ -110,7 +111,7 @@
         alt-x = "workspace X";
         alt-y = "workspace Y";
         alt-z = "workspace Z";
-    
+
         # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
         alt-shift-1 = "move-node-to-workspace 1";
         alt-shift-2 = "move-node-to-workspace 2";
@@ -134,7 +135,7 @@
         alt-shift-o = "move-node-to-workspace O";
         alt-shift-p = "move-node-to-workspace P";
         alt-shift-q = "move-node-to-workspace Q";
-        alt-shift-r = "move-node-to-workspace R";
+        #alt-shift-r = "move-node-to-workspace R";
         alt-shift-s = "move-node-to-workspace S";
         alt-shift-t = "move-node-to-workspace T";
         alt-shift-u = "move-node-to-workspace U";
@@ -143,33 +144,107 @@
         alt-shift-x = "move-node-to-workspace X";
         alt-shift-y = "move-node-to-workspace Y";
         alt-shift-z = "move-node-to-workspace Z";
-    
+
         # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
         alt-tab = "workspace-back-and-forth";
         # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
         alt-shift-tab = "move-workspace-to-monitor --wrap-around next";
-    
+
         # See: https://nikitabobko.github.io/AeroSpace/commands#mode
         alt-shift-semicolon = "mode service";
       };
 
+      on-window-detected = [
+        # Slack always on workspace S
+        {
+          "if".app-id = "com.tinyspeck.slackmacgap";
+          run = "move-node-to-workspace S";
+        }
+
+        # Podman always on workspace D
+        {
+          "if".app-id = "io.podmandesktop.PodmanDesktop";
+          run = "move-node-to-workspace D";
+        }
+
+        # Chrome
+        {
+          "if".app-id = "io.google.Chrome";
+          run = "move-node-to-workspace B";
+        }
+
+        # Terminal Windows
+        {
+          "if".app-id = "com.mitchellh.ghostty";
+          run = "move-node-to-workspace T";
+        }
+
+        {
+          # NOTE: must match --class="QuickLauncherPopup" flag passed when launching ghostty
+          "if".window-title-regex-substring = "Launcher";
+          run = [
+            "layout floating" # Only this window floats
+          ];
+        }
+
+        # Run ghostty fzf window in center of screen
+        # TODO this will not work until version 0.20.0 when run restrictions are lifter
+        # see: https://github.com/nikitabobko/AeroSpace/issues/20
+        #{
+        #  # NOTE: must match --class="QuickLauncherPopup" flag passed when launching ghostty
+        #  "if".app-id = "Ghostty-Popup";
+        #  run = [
+        #    "layout floating" # Only this window floats
+        #    "resize width 800" # Set the size
+        #    "resize height 800" # Set the size
+        #  ];
+        #}
+      ];
+
       mode.service.binding = {
-        esc = ["reload-config" "mode main"];
-        r = ["flatten-workspace-tree" "mode main"]; # reset layout
-        f = ["layout floating tiling" "mode main"]; # Toggle between floating and tiling layout
-        backspace = ["close-all-windows-but-current" "mode main"];
-    
+        esc = [
+          "reload-config"
+          "mode main"
+        ];
+        r = [
+          "flatten-workspace-tree"
+          "mode main"
+        ]; # reset layout
+        f = [
+          "layout floating tiling"
+          "mode main"
+        ]; # Toggle between floating and tiling layout
+        backspace = [
+          "close-all-windows-but-current"
+          "mode main"
+        ];
+
         # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
         #s = ["layout sticky tiling", "mode main"];
-    
-        alt-shift-h = ["join-with left" "mode main"];
-        alt-shift-j = ["join-with down" "mode main"];
-        alt-shift-k = ["join-with up" "mode main"];
-        alt-shift-l = ["join-with right" "mode main"];
-    
+
+        alt-shift-h = [
+          "join-with left"
+          "mode main"
+        ];
+        alt-shift-j = [
+          "join-with down"
+          "mode main"
+        ];
+        alt-shift-k = [
+          "join-with up"
+          "mode main"
+        ];
+        alt-shift-l = [
+          "join-with right"
+          "mode main"
+        ];
+
         down = "volume down";
         up = "volume up";
-        shift-down = ["volume set 0" "mode main"];
+        shift-down = [
+          "volume set 0"
+          "mode main"
+        ];
       };
     };
   };

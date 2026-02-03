@@ -42,18 +42,14 @@
     '';
     taps = [
       # for `emacs-mac`
-      "railwaycat/emacsmacport"
+      #"railwaycat/emacsmacport"
       "d12frosted/emacs-plus"
     ];
     casks = [
       "keepingyouawake"
-      "alacritty"
       "ghostty"
 
       "google-cloud-sdk"
-
-      # managed by Self Service
-      #"docker"
     ];
 
     # AppStore applications
