@@ -1,27 +1,27 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
 
+# Common home configuration to be included in home-manager.users.<username>
+{
   imports = [
     ./zsh.nix
-    ./aerospace.nix
   ];
 
-  # Home Manager version
-  home.stateVersion = "24.11";
+  home.stateVersion = "26.05";
 
-  # Enable Home Manager
-  #programs.home-manager.enable = true;
+  programs.git = {
+    enable = true;
+    userName = "Justin Endacott";
+    userEmail = "justin.endacott@gmail.com";
+  };
 
-  # Packages to install for the user
-  #home.packages = with pkgs; [];
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
 
-  # Programs configuration
-  #programs = {
-  #  git = {
-  #    enable = true;
-  #    userName = "Justin Endacott";
-  #    # FIXME need to change this for work
-  #    #userEmail = "justin.endacott@smartsheet.com";
-  #    userEmail = "justin.endacott@gmail.com";
-  #  };
-  #};
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
 }

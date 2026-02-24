@@ -1,55 +1,64 @@
 {
-  description = "Example nix-darwin system flake";
-
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nix-darwin.url = "github:LnL7/nix-darwin/master";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    hyprland.url = "github:hyprwm/Hyprland";
+    nix-colors.url = "github:misterio77/nix-colors";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-  };
-
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager }:
-  let
-    configuration = { pkgs, ... }: {
-      # Necessary for using flakes on this system.
-      nix.settings.experimental-features = "nix-command flakes";
-
-      # Set Git commit hash for darwin-version.
-      system.configurationRevision = self.rev or self.dirtyRev or null;
-
-      # Used for backwards compatibility, please read the changelog before changing.
-      # $ darwin-rebuild changelog
-      system.stateVersion = 6;
-
-      # The platform the configuration will be used on.
-      #nixpkgs.hostPlatform = "x86_64-darwin";
-
-      # Allow unfree packages to be installed
-      nixpkgs.config.allowUnfree = true;
-    };
-  in
-  {
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#old-macbook
-    darwinConfigurations."old-macbook" = nix-darwin.lib.darwinSystem {
-      modules = [
-        configuration
-        ./machines/old-macbook.nix
-        home-manager.darwinModules.home-manager
-      ];
-    };
-
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#smar
-    darwinConfigurations."smar" = nix-darwin.lib.darwinSystem {
-      modules = [
-        configuration
-        ./machines/smar.nix
-        home-manager.darwinModules.home-manager
-      ];
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
+
+  outputs =
+    {
+      nixpkgs,
+      hyprland,
+      nix-colors,
+      home-manager,
+      nix-darwin,
+      ...
+    }:
+    let
+      system = "x86_64-linux";
+    in
+    {
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        inherit system;
+
+        specialArgs = {
+          inherit hyprland home-manager;
+        };
+
+        modules = [
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.extraSpecialArgs = {
+              inherit nix-colors hyprland;
+              theme = "tokyo-night";
+            };
+          }
+          ./machines/resetti/default.nix
+        ];
+      };
+
+      darwinConfigurations."old-macbook" = nix-darwin.lib.darwinSystem {
+        modules = [
+          nix-darwin.modules.common
+          ./machines/old-macbook.nix
+          home-manager.darwinModules.home-manager
+        ];
+      };
+
+      darwinConfigurations."smar" = nix-darwin.lib.darwinSystem {
+        modules = [
+          nix-darwin.modules.common
+          ./machines/smar.nix
+          home-manager.darwinModules.home-manager
+        ];
+      };
+    };
 }

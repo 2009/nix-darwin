@@ -91,6 +91,15 @@ nix-collect-garbage -d
 sudo nix-collect-garbage -d
 #+END_SRC
 
+* Troubleshooting
+** Hyprland config errors
+
+Run the following to check for Hyprland configuration errors:
+
+#+BEGIN_SRC sh
+hyprctl configerrors
+#+END_SRC
+
 * Common Issues
 ** SSL Issues during nix-darwin install
 
