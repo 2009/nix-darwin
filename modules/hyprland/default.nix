@@ -26,6 +26,7 @@ in
     ./notifications-mako.nix
     ./statusbar-waybar.nix
     ./launcher-wofi.nix
+    ./theme-viewer.nix
   ];
 
   colorScheme = nix-colors.colorSchemes.${selectedTheme.base16-scheme};

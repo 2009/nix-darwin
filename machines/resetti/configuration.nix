@@ -127,7 +127,6 @@
     # GUIs
     bitwarden-desktop
     chromium
-    obsidian
     vlc
     signal-desktop
     typora

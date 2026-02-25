@@ -3,7 +3,7 @@
   wayland.windowManager.hyprland.settings = {
     bind = [
       # Terminal
-      "ALT, return, exec, $terminal"
+      "SUPER, return, exec, $terminal"
 
       # Kill window
       "ALT, W, killactive,"
@@ -161,7 +161,6 @@
   wayland.windowManager.hyprland.extraConfig = ''
     submap = launch
     bind = , a, exec, hyprctl dispatch submap reset && $webapp=https://chatgpt.com
-    bind = SHIFT, a, exec, hyprctl dispatch submap reset && $webapp=https://grok.com
     bind = , b, exec, hyprctl dispatch submap reset && $browser
     bind = , c, exec, hyprctl dispatch submap reset && $webapp=https://app.hey.com/calendar/weeks/
     bind = , d, exec, hyprctl dispatch submap reset && $terminal -e lazydocker
@@ -170,14 +169,11 @@
     bind = , g, exec, hyprctl dispatch submap reset && $messenger
     bind = SHIFT, g, exec, hyprctl dispatch submap reset && $webapp=https://web.whatsapp.com/
     bind = , m, exec, hyprctl dispatch submap reset && $music
-    bind = , n, exec, hyprctl dispatch submap reset && $terminal -e nvim
-    bind = , o, exec, hyprctl dispatch submap reset && obsidian --disable-gpu
     bind = , p, exec, hyprctl dispatch submap reset && $passwordManager
     bind = , t, exec, hyprctl dispatch submap reset && $terminal -e btop
-    bind = , x, exec, hyprctl dispatch submap reset && $webapp=https://x.com/
-    bind = SHIFT, x, exec, hyprctl dispatch submap reset && $webapp=https://x.com/compose/post
     bind = , y, exec, hyprctl dispatch submap reset && $webapp=https://youtube.com/
     bind = , k, exec, hyprctl dispatch submap reset && ~/.local/share/nix-config/bin/show-keybindings
+    bind = SHIFT, t, exec, hyprctl dispatch submap reset && ~/.local/share/nix-config/bin/show-themes
     bind = , escape, submap, reset
     submap = reset
   '';

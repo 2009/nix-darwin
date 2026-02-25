@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Display available nix-colors themes with color swatches using wofi
+
+THEME_LIST="$HOME/.local/share/nix-config/theme-list"
+
+if [ ! -f "$THEME_LIST" ]; then
+    notify-send "Theme Viewer" "Theme list not found. Rebuild your NixOS config."
+    exit 1
+fi
+
+cat "$THEME_LIST" |
+flock --nonblock /tmp/.wofi-themes.lock -c "wofi -dmenu -i --allow-markup --width 70% --height 50% -p 'Themes'"
