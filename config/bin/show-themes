@@ -8,5 +8,11 @@ if [ ! -f "$THEME_LIST" ]; then
     exit 1
 fi
 
-cat "$THEME_LIST" |
-flock --nonblock /tmp/.wofi-themes.lock -c "wofi -dmenu -i --allow-markup --width 70% --height 50% -p 'Themes'"
+selected=$(cat "$THEME_LIST" |
+flock --nonblock /tmp/.wofi-themes.lock -c "wofi -dmenu -i --allow-markup --cache-file=/dev/null --width 70% --height 50% -p 'Themes'")
+
+if [ -n "$selected" ]; then
+    scheme_name=$(echo "$selected" | sed 's/^[★ ]* *//; s/ .*//')
+    echo -n "$scheme_name" | wl-copy
+    notify-send "Theme" "Copied: $scheme_name"
+fi
