@@ -14,6 +14,13 @@
       "match:class ^(steam)$, float on"
       "match:class ^(com.libretro.RetroArch)$, fullscreen on"
 
+      # Auto-assign apps to named workspaces (matching AeroSpace)
+      "match:class ^(Slack)$, workspace name:S"
+      "match:class ^(chromium)$, workspace name:B"
+      "match:class ^(ghostty)$, workspace name:T"
+      "match:class ^(podman-desktop)$, workspace name:D"
+      "match:class ^(signal)$, workspace name:G"
+
       # Just dash of transparency
       "match:class .*, opacity 0.97 0.9"
       # Normal chrome Youtube tabs

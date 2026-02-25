@@ -9,8 +9,13 @@ let
   convert = nix-colors.lib.conversions.hexToRGBString;
   backgroundRgb = "rgb(${convert ", " palette.base00})";
   foregroundRgb = "rgb(${convert ", " palette.base05})";
+  activeRgb = "rgb(${convert ", " palette.base0E})";
+  emptyRgb = "rgb(${convert ", " palette.base04})";
 in
 {
+  # For styling see:
+  # https://github.com/Alexays/Waybar/wiki/Styling
+  # https://github.com/Alexays/Waybar/wiki/Module:-Hyprland#style
   home.file = {
     ".config/waybar/" = {
       source = ../../config/waybar;
@@ -19,12 +24,19 @@ in
     ".config/waybar/theme.css" = {
       text = ''
         @define-color background ${backgroundRgb};
-        * {
-          color: ${foregroundRgb};
-        }
 
         window#waybar {
           background-color: ${backgroundRgb};
+          color: ${foregroundRgb};
+        }
+
+        #workspaces button.empty {
+          color: ${emptyRgb};
+        }
+
+        #workspaces button.active {
+          font-weight: 800;
+          color: ${activeRgb};
         }
       '';
     };
@@ -55,26 +67,11 @@ in
         ];
         "hyprland/workspaces" = {
           on-click = "activate";
-          format = "{icon}";
-          format-icons = {
-            default = "";
-            "1" = "1";
-            "2" = "2";
-            "3" = "3";
-            "4" = "4";
-            "5" = "5";
-            "6" = "6";
-            "7" = "7";
-            "8" = "8";
-            "9" = "9";
-            active = "󱓻";
-          };
+          format = "{name}";
           persistent-workspaces = {
             "1" = [ ];
             "2" = [ ];
             "3" = [ ];
-            "4" = [ ];
-            "5" = [ ];
           };
         };
         cpu = {
