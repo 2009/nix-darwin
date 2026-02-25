@@ -3,13 +3,9 @@
   pkgs,
   nix-colors,
   hyprland,
-  theme ? "tokyo-night",
+  theme ? "onedark",
   ...
 }:
-let
-  themes = import ./themes.nix;
-  selectedTheme = themes.${theme};
-in
 {
   imports = [
     nix-colors.homeManagerModules.default
@@ -29,7 +25,7 @@ in
     ./theme-viewer.nix
   ];
 
-  colorScheme = nix-colors.colorSchemes.${selectedTheme.base16-scheme};
+  colorScheme = nix-colors.colorSchemes.${theme};
 
   wayland.windowManager.hyprland = {
     enable = true;

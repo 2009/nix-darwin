@@ -1,11 +1,10 @@
 {
   config,
-  theme ? "tokyo-night",
+  wallpaper ? "1-Pawel-Czerwinski-Abstract-Purple-Blue.jpg",
   ...
 }:
 let
-  themes = import ./themes.nix;
-  wallpaperPath = "~/Pictures/Wallpapers/${themes.${theme}.wallpaper}";
+  wallpaperPath = "~/Pictures/Wallpapers/${wallpaper}";
 in
 {
   home.file = {

@@ -1,7 +1,6 @@
-{ nix-colors, theme ? "tokyo-night", ... }:
+{ nix-colors, theme ? "onedark", ... }:
 let
-  themes = import ./themes.nix;
-  activeScheme = themes.${theme}.base16-scheme;
+  activeScheme = theme;
 
   allSchemes = nix-colors.colorSchemes;
   schemeNames = builtins.attrNames allSchemes;

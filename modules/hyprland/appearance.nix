@@ -4,7 +4,7 @@ let
     hex: alpha:
     "rgba(${hex}${alpha})";
 
-  inactiveBorder = hexToRgba config.colorScheme.palette.base09 "aa";
+  inactiveBorder = hexToRgba config.colorScheme.palette.base03 "aa";
   activeBorder = hexToRgba config.colorScheme.palette.base0D "aa";
 in
 {

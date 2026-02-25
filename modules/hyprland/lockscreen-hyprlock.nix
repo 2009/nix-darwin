@@ -2,12 +2,11 @@
   config,
   pkgs,
   nix-colors,
-  theme ? "tokyo-night",
+  wallpaper ? "1-Pawel-Czerwinski-Abstract-Purple-Blue.jpg",
   ...
 }:
 let
-  themes = import ./themes.nix;
-  wallpaperPath = "~/Pictures/Wallpapers/${themes.${theme}.wallpaper}";
+  wallpaperPath = "~/Pictures/Wallpapers/${wallpaper}";
 
   palette = config.colorScheme.palette;
   convert = nix-colors.lib.conversions.hexToRGBString;

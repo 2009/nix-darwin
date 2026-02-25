@@ -35,7 +35,7 @@ sudo nix-collect-garbage -d
 - `home-manager` — user environment management
 - `nix-darwin` — macOS system configuration
 
-The `theme` value (e.g., `"tokyo-night"`) is passed to home-manager modules via `extraSpecialArgs` in `flake.nix`. The `hyprland` and `nix-colors` inputs are also passed via `specialArgs`/`extraSpecialArgs`.
+The `theme` (a nix-colors base16 scheme name, e.g., `"onedark"`) and `wallpaper` (filename from `config/wallpapers/`) are passed to home-manager modules via `extraSpecialArgs` in `flake.nix`. The `hyprland` and `nix-colors` inputs are also passed via `specialArgs`/`extraSpecialArgs`.
 
 **Machine configs** (`machines/`):
 - `machines/default.nix` — shared base config imported by all machines (system packages, home-manager settings)
@@ -52,8 +52,7 @@ The `theme` value (e.g., `"tokyo-night"`) is passed to home-manager modules via 
 - `modules/darwin/` — macOS-specific modules (aerospace, homebrew)
 
 **Hyprland modules** (`modules/hyprland/`):
-- `default.nix` — imports all sub-modules, sets up nix-colors colorScheme, enables Hyprland
-- `themes.nix` — theme name to base16 scheme + wallpaper mapping
+- `default.nix` — imports all sub-modules, sets up nix-colors colorScheme from `theme` arg, enables Hyprland
 - `keybindings.nix`, `autostart.nix`, `envs.nix`, `input.nix`, `appearance.nix`, `windows.nix`, `monitors.nix` — core Hyprland config
 - `lockscreen-hyprlock.nix`, `wallpaper-hyprpaper.nix`, `idle-hypridle.nix`, `notifications-mako.nix`, `statusbar-waybar.nix`, `launcher-wofi.nix` — ecosystem services
 
