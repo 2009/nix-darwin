@@ -39,7 +39,7 @@
             home-manager.extraSpecialArgs = {
               inherit nix-colors hyprland;
               theme = "onedark";
-              wallpaper = "1-Pawel-Czerwinski-Abstract-Purple-Blue.jpg";
+              wallpaper = "nord-1.png";
             };
           }
           ./machines/resetti/default.nix
