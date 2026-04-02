@@ -46,6 +46,26 @@
         ];
       };
 
+      nixosConfigurations.homelab = nixpkgs.lib.nixosSystem {
+        inherit system;
+
+        specialArgs = {
+          inherit hyprland home-manager;
+        };
+
+        modules = [
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.extraSpecialArgs = {
+              inherit nix-colors hyprland;
+              theme = "onedark";
+              wallpaper = "ac-robo.png";
+            };
+          }
+          ./machines/homelab/default.nix
+        ];
+      };
+
       darwinConfigurations."old-macbook" = nix-darwin.lib.darwinSystem {
         modules = [
           nix-darwin.modules.common
