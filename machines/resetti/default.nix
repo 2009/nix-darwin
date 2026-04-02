@@ -1,4 +1,4 @@
-{ home-manager, ... }:
+{ pkgs, home-manager, ... }:
 
 {
   imports = [
@@ -9,6 +9,7 @@
     ../../modules/nixos/audio.nix
     ../../modules/nixos/bluetooth.nix
     ../../modules/nixos/docker.nix
+    ../../modules/nixos/steam.nix
     ../default.nix
   ];
 
