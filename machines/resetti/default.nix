@@ -21,4 +21,8 @@
       ../../modules/home.nix
     ];
   };
+
+  environment.systemPackages = with pkgs; [
+    discord
+  ];
 }
