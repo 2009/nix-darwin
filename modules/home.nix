@@ -4,6 +4,7 @@
 {
   imports = [
     ./zsh.nix
+    ./ruby.nix
   ];
 
   home.stateVersion = "26.05";

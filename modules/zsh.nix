@@ -149,8 +149,7 @@
       #export PATH="$GOROOT/bin:$PATH"
       #export PATH="$PATH:$GOPATH/bin"
 
-      # Load rbenv
-      eval "$(rbenv init - zsh)"
+      # rbenv is now managed by programs.rbenv in ruby.nix
     '';
 
     # TODO checkout Mac Dash.app and opening man pages in it
