@@ -67,16 +67,15 @@
       };
 
       darwinConfigurations."old-macbook" = nix-darwin.lib.darwinSystem {
+        system = "x86_64-linux";
         modules = [
-          nix-darwin.modules.common
-          ./machines/old-macbook.nix
+          ./machines/old-macbook/default.nix
           home-manager.darwinModules.home-manager
         ];
       };
 
       darwinConfigurations."smar" = nix-darwin.lib.darwinSystem {
         modules = [
-          nix-darwin.modules.common
           ./machines/smar.nix
           home-manager.darwinModules.home-manager
         ];

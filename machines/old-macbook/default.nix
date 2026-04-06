@@ -21,6 +21,9 @@ in
   # Set the nix-darwin config directory
   environment.etc."nix-darwin".source = sourceDir;
 
+  # Set primary user nix-darwin options are applied against
+  system.primaryUser = username;
+
   # Define user settings
   users.users.${username} = {
     description = "Tintin";
@@ -31,7 +34,7 @@ in
   };
 
   # Set home-manager configs for username
-  home-manager.users.${username} = import ../modules/home.nix;
+  home-manager.users.${username} = import ../../modules/home.nix;
 
   # Set hostname
   #networking.hostName = "${hostname}";
@@ -44,6 +47,9 @@ in
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = [ ];
+
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
 
   # Set Git commit hash for darwin-version.
   #system.configurationRevision = self.rev or self.dirtyRev or null;

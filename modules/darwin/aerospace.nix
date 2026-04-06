@@ -1,9 +1,9 @@
 { pkgs, ... }:
 {
-  programs.aerospace = {
+  services.aerospace = {
     enable = true;
 
-    userSettings = {
+    settings = {
 
       # Gaps between windows (inner-*) and between monitor edges (outer-*).
       # Possible values:
