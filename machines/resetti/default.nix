@@ -24,5 +24,10 @@
 
   environment.systemPackages = with pkgs; [
     discord
+    wineWowPackages.waylandFull
   ];
+
+  # Add user to docker group for non-root docker access
+  # TODO remove duplication and test
+  users.users.zenchi.extraGroups = [ "docker" ];
 }

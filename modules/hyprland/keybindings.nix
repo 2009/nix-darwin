@@ -14,7 +14,7 @@
       "ALT SHIFT, SPACE, exec, pkill -SIGUSR1 waybar"
 
       # Session management
-      "ALT, ESCAPE, exec, hyprlock"
+      # "ALT, ESCAPE, exec, hyprlock"
       "ALT SHIFT, ESCAPE, exit,"
       "ALT CTRL, ESCAPE, exec, reboot"
       "ALT SHIFT CTRL, ESCAPE, exec, systemctl poweroff"
