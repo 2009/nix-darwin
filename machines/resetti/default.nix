@@ -24,7 +24,7 @@
 
   environment.systemPackages = with pkgs; [
     discord
-    wineWowPackages.waylandFull
+    wineWow64Packages.waylandFull
   ];
 
   # Add user to docker group for non-root docker access

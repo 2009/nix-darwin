@@ -43,7 +43,7 @@ in
     {
       # Set custom zsh config for this machine only
       programs.zsh = {
-        initExtra = ''
+        initContent = ''
           # Claude Code
           # APAC Models: https://699475926481-rxrabrht.ap-southeast-2.console.aws.amazon.com/bedrock/home?region=ap-southeast-2#/inference-profiles
           export CLAUDE_CODE_USE_BEDROCK=1

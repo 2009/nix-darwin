@@ -29,7 +29,7 @@
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = hyprland.packages.${pkgs.system}.hyprland;
+    package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
   };
 
   home.packages = with pkgs; [
@@ -42,7 +42,7 @@
     pavucontrol
     libnotify
     nautilus
-    blueberry
+    blueman
     clipse
     wl-clipboard
     wl-clip-persist

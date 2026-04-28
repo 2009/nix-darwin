@@ -8,7 +8,7 @@
       "match:class ^(chromium)$, tile on"
 
       # Settings management
-      "match:class ^(org.pulseaudio.pavucontrol|blueberry.py)$, float on"
+      "match:class ^(org.pulseaudio.pavucontrol|.blueman-manager-wrapped)$, float on"
 
       # Float Steam, fullscreen RetroArch
       "match:class ^(steam)$, float on"

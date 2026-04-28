@@ -21,7 +21,7 @@
 
   programs.zsh = {
 
-    initExtra = ''
+    initContent = ''
       # Disable default completion menu
       zstyle ':completion:*' menu no
 

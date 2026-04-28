@@ -20,7 +20,7 @@
       "ALT SHIFT CTRL, ESCAPE, exec, systemctl poweroff"
 
       # Tiling control
-      "ALT, slash, togglesplit,"
+      "ALT, slash, layoutmsg, togglesplit"
       "ALT, P, pseudo,"
       "ALT, V, togglefloating,"
       "ALT SHIFT, Plus, fullscreen,"

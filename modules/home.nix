@@ -11,8 +11,10 @@
 
   programs.git = {
     enable = true;
-    userName = "Justin Endacott";
-    userEmail = "justin.endacott@gmail.com";
+    settings.user = {
+      name = "Justin Endacott";
+      email = "justin.endacott@gmail.com";
+    };
   };
 
   programs.direnv = {

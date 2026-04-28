@@ -112,7 +112,7 @@
     # TODO TODO learn zsh keybingings for deleting words, moving backwards are forwards (without left/right)
     # both single character and word, also copy and posting (i.e. to move a flag to the end of a command)
 
-    initExtra = ''
+    initContent = ''
       export EDITOR=vim
 
       # Edit promt command in editor
