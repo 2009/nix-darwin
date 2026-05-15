@@ -132,6 +132,8 @@
     typora
     dropbox
     spotify
+    gimp
+    inkscape
 
     # Development
     ffmpeg
