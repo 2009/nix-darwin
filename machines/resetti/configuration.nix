@@ -70,7 +70,6 @@
   fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-color-emoji
-    nerd-fonts.caskaydia-mono
   ];
 
   # Direnv
@@ -110,6 +109,7 @@
     curl
     wget
     unzip
+    (p7zip.override { enableUnfree = true; })
     gnumake
     ripgrep
     fd
@@ -144,6 +144,7 @@
 
     # AI
     claude-code
+    jq
 
     # Disk management
     kdePackages.partitionmanager

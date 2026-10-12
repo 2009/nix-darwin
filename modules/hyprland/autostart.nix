@@ -1,14 +1,18 @@
-{ ... }:
+{ lib, ... }:
+let
+  inherit (import ./lua-helpers.nix { inherit lib; }) mkHook;
+in
 {
-  wayland.windowManager.hyprland.settings = {
-    exec-once = [
-      "hyprsunset"
-      "systemctl --user start hyprpolkitagent"
-      "wl-clip-persist --clipboard regular & clipse -listen"
-    ];
+  # Long-running session services run as systemd user units tied to
+  # graphical-session.target; waybar and hyprpolkitagent are enabled in their
+  # own modules.
+  services.hyprsunset.enable = true;
 
-    exec = [
-      "pkill -SIGUSR2 waybar || waybar"
+  wayland.windowManager.hyprland.settings = {
+    on = [
+      (mkHook "hyprland.start" [
+        "wl-clip-persist --clipboard regular & clipse -listen"
+      ])
     ];
   };
 }

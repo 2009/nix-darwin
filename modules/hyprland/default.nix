@@ -30,6 +30,11 @@
   wayland.windowManager.hyprland = {
     enable = true;
     package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+
+    # Hyprland 0.55 deprecated hyprlang (.conf) in favour of Lua; 0.56 still
+    # loads .conf but shows a deprecation notice, and support is slated to be
+    # dropped after 1-2 releases (reportedly 0.57).
+    configType = "lua";
   };
 
   home.packages = with pkgs; [
@@ -58,6 +63,7 @@
       package = pkgs.gnome-themes-extra;
     };
   };
+
 
   programs.neovim.enable = true;
 

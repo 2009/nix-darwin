@@ -1,51 +1,127 @@
 { ... }:
 {
   wayland.windowManager.hyprland.settings = {
-    windowrule = [
-      "match:class .*, suppress_event maximize"
-
-      # Force chromium into a tile to deal with --app bug
-      "match:class ^(chromium)$, tile on"
-
-      # Settings management
-      "match:class ^(org.pulseaudio.pavucontrol|.blueman-manager-wrapped)$, float on"
+    # Rules apply in order, so the opacity entries below stay in their original
+    # sequence -- later ones deliberately override earlier ones.
+    window_rule = [
+      {
+        name = "suppress-maximize";
+        match.class = ".*";
+        suppress_event = "maximize";
+      }
 
       # Float Steam, fullscreen RetroArch
-      "match:class ^(steam)$, float on"
-      "match:class ^(com.libretro.RetroArch)$, fullscreen on"
+      {
+        name = "float-steam";
+        match.class = "^(steam)$";
+        float = true;
+      }
+      {
+        name = "fullscreen-retroarch";
+        match.class = "^(com.libretro.RetroArch)$";
+        fullscreen = true;
+      }
 
       # Auto-assign apps to named workspaces (matching AeroSpace)
-      "match:class ^(Slack)$, workspace name:S"
-      "match:class ^(chromium)$, workspace name:B"
-      "match:class ^(ghostty)$, workspace name:T"
-      "match:class ^(podman-desktop)$, workspace name:D"
-      "match:class ^(signal)$, workspace name:G"
+      {
+        name = "ws-slack";
+        match.class = "^(Slack)$";
+        workspace = "name:S";
+      }
+      # Chromium goes to workspace B, forced into a tile to deal with --app bug
+      {
+        name = "chromium";
+        match.class = "^(chromium)$";
+        tile = true;
+        workspace = "name:B";
+      }
+      {
+        name = "ws-podman-desktop";
+        match.class = "^(podman-desktop)$";
+        workspace = "name:D";
+      }
+      {
+        name = "ws-signal";
+        match.class = "^(signal)$";
+        workspace = "name:G";
+      }
 
       # Just dash of transparency
-      "match:class .*, opacity 0.97 0.9"
+      {
+        name = "opacity-default";
+        match.class = ".*";
+        opacity = "0.97 0.9";
+      }
       # Normal chrome Youtube tabs
-      "match:class ^(chromium|google-chrome|google-chrome-unstable)$, match:title .*Youtube.*, opacity 1 1"
-      "match:class ^(chromium|google-chrome|google-chrome-unstable)$, opacity 1 0.97"
+      {
+        name = "opacity-chrome-youtube";
+        match = {
+          class = "^(chromium|google-chrome|google-chrome-unstable)$";
+          title = ".*Youtube.*";
+        };
+        opacity = "1 1";
+      }
+      {
+        name = "opacity-chrome";
+        match.class = "^(chromium|google-chrome|google-chrome-unstable)$";
+        opacity = "1 0.97";
+      }
       # Web apps
-      "match:initial_class ^(chrome-.*-Default)$, opacity 0.97 0.9"
+      {
+        name = "opacity-webapps";
+        match.initial_class = "^(chrome-.*-Default)$";
+        opacity = "0.97 0.9";
+      }
       # Youtube
-      "match:initial_class ^(chrome-youtube.*-Default)$, opacity 1 1"
-      "match:class ^(zoom|vlc|org.kde.kdenlive|com.obsproject.Studio)$, opacity 1 1"
-      "match:class ^(com.libretro.RetroArch|steam)$, opacity 1 1"
+      {
+        name = "opacity-webapp-youtube";
+        match.initial_class = "^(chrome-youtube.*-Default)$";
+        opacity = "1 1";
+      }
+      {
+        name = "opacity-media";
+        match.class = "^(zoom|vlc|org.kde.kdenlive|com.obsproject.Studio)$";
+        opacity = "1 1";
+      }
+      {
+        name = "opacity-games";
+        match.class = "^(com.libretro.RetroArch|steam)$";
+        opacity = "1 1";
+      }
 
       # Fix some dragging issues with XWayland
-      "match:class ^$, match:title ^$, match:xwayland 1, match:float 1, match:fullscreen 0, match:pin 0, no_focus 1"
+      {
+        name = "fix-xwayland-drags";
+        match = {
+          class = "^$";
+          title = "^$";
+          xwayland = true;
+          float = true;
+          fullscreen = false;
+          pin = false;
+        };
+        no_focus = true;
+      }
 
       # Float in the middle for clipse clipboard manager
-      "match:class (clipse), float on"
-      "match:class (clipse), size 622 652"
-      "match:class (clipse), stay_focused on"
+      # (CTRL+ALT+V opens it in Ghostty with --class=app.clipse; Ghostty needs a
+      # dotted GTK app ID and ignores a bare "clipse".)
+      {
+        name = "clipse";
+        match.class = "^(app.clipse)$";
+        float = true;
+        size = "622 652";
+        stay_focused = true;
+      }
     ];
 
-    layerrule = [
+    layer_rule = [
       # Proper background blur for wofi
-      "match:namespace wofi, blur on"
-      "match:namespace waybar, blur on"
+      {
+        name = "blur-wofi";
+        match.namespace = "wofi";
+        blur = true;
+      }
     ];
   };
 }

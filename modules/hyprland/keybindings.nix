@@ -1,180 +1,236 @@
-{ ... }:
+{ lib, ... }:
+let
+  inherit (lib.generators) mkLuaInline;
+
+  # hl.bind(keys, dispatcher [, opts]). Note that every modifier needs its own
+  # "+" separator -- "ALT SHIFT + h" fails to parse.
+  bind = key: dsp: { _args = [ key (mkLuaInline dsp) ]; };
+  bindWith = key: dsp: opts: {
+    _args = [
+      key
+      (mkLuaInline dsp)
+      opts
+    ];
+  };
+
+  locked = {
+    locked = true;
+  };
+  lockedRepeat = {
+    locked = true;
+    repeating = true;
+  };
+  mouse = {
+    mouse = true;
+  };
+
+  # Vim keys to Hyprland directions.
+  directions = {
+    h = "left";
+    j = "down";
+    k = "up";
+    l = "right";
+  };
+
+  numbered = [
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+  ];
+
+  focusNamed = [
+    "B"
+    "C"
+    "D"
+    "E"
+    "F"
+    "G"
+    "I"
+    "M"
+    "N"
+    "O"
+    "Q"
+    "R"
+    "S"
+    "T"
+    "U"
+    "X"
+    "Y"
+    "Z"
+  ];
+
+  moveNamed = [
+    "A"
+    "B"
+    "C"
+    "D"
+    "E"
+    "F"
+    "G"
+    "I"
+    "M"
+    "N"
+    "O"
+    "P"
+    "Q"
+    "R"
+    "S"
+    "T"
+    "U"
+    "V"
+    "W"
+    "X"
+    "Y"
+    "Z"
+  ];
+
+  # Launcher submap entries: key -> command expression (Lua).
+  launchEntries = {
+    "a" = ''webapp .. "=https://chatgpt.com"'';
+    "b" = "browser";
+    "c" = ''webapp .. "=https://app.hey.com/calendar/weeks/"'';
+    "d" = ''terminal .. " -e lazydocker"'';
+    "e" = ''webapp .. "=https://app.hey.com"'';
+    "f" = "fileManager";
+    "g" = "messenger";
+    "SHIFT + g" = ''webapp .. "=https://web.whatsapp.com/"'';
+    "m" = "music";
+    "p" = "passwordManager";
+    "t" = ''terminal .. " -e btop"'';
+    "y" = ''webapp .. "=https://youtube.com/"'';
+    "k" = ''"~/.local/share/nix-config/bin/show-keybindings"'';
+    "SHIFT + t" = ''"~/.local/share/nix-config/bin/show-themes"'';
+  };
+in
 {
   wayland.windowManager.hyprland.settings = {
     bind = [
       # Terminal
-      "SUPER, return, exec, $terminal"
+      (bind "SUPER + return" "hl.dsp.exec_cmd(terminal)")
 
       # Kill window
-      "ALT, W, killactive,"
-      "ALT, Backspace, killactive,"
+      (bind "ALT + W" "hl.dsp.window.close()")
+      (bind "ALT + Backspace" "hl.dsp.window.close()")
 
       # Launcher
-      "SUPER, space, exec, wofi --show drun --sort-order=alphabetical"
-      "ALT SHIFT, SPACE, exec, pkill -SIGUSR1 waybar"
+      (bind "SUPER + space" ''hl.dsp.exec_cmd("wofi --show drun --sort-order=alphabetical")'')
+      (bind "ALT + SHIFT + SPACE" ''hl.dsp.exec_cmd("pkill -SIGUSR1 waybar")'')
 
       # Session management
-      # "ALT, ESCAPE, exec, hyprlock"
-      "ALT SHIFT, ESCAPE, exit,"
-      "ALT CTRL, ESCAPE, exec, reboot"
-      "ALT SHIFT CTRL, ESCAPE, exec, systemctl poweroff"
+      # (bind "ALT + ESCAPE" ''hl.dsp.exec_cmd("hyprlock")'')
+      (bind "ALT + SHIFT + ESCAPE" "hl.dsp.exit()")
+      (bind "ALT + CTRL + ESCAPE" ''hl.dsp.exec_cmd("reboot")'')
+      (bind "ALT + SHIFT + CTRL + ESCAPE" ''hl.dsp.exec_cmd("systemctl poweroff")'')
 
       # Tiling control
-      "ALT, slash, layoutmsg, togglesplit"
-      "ALT, P, pseudo,"
-      "ALT, V, togglefloating,"
-      "ALT SHIFT, Plus, fullscreen,"
-
-      # Vim-style focus
-      "ALT, h, movefocus, l"
-      "ALT, j, movefocus, d"
-      "ALT, k, movefocus, u"
-      "ALT, l, movefocus, r"
-
-      # Vim-style move window
-      "ALT SHIFT, h, movewindow, l"
-      "ALT SHIFT, j, movewindow, d"
-      "ALT SHIFT, k, movewindow, u"
-      "ALT SHIFT, l, movewindow, r"
+      (bind "ALT + slash" ''hl.dsp.layout("togglesplit")'')
+      (bind "ALT + P" "hl.dsp.window.pseudo()")
+      (bind "ALT + V" ''hl.dsp.window.float({ action = "toggle" })'')
+      (bind "ALT + SHIFT + Plus" "hl.dsp.window.fullscreen()")
 
       # Resize
-      "ALT, minus, resizeactive, -50 0"
-      "ALT, equal, resizeactive, 50 0"
-      "ALT SHIFT, minus, resizeactive, 0 -50"
-      "ALT SHIFT, equal, resizeactive, 0 50"
-
-      # Numbered workspaces
-      "ALT, 1, workspace, 1"
-      "ALT, 2, workspace, 2"
-      "ALT, 3, workspace, 3"
-      "ALT, 4, workspace, 4"
-      "ALT, 5, workspace, 5"
-      "ALT, 6, workspace, 6"
-      "ALT, 7, workspace, 7"
-      "ALT, 8, workspace, 8"
-      "ALT, 9, workspace, 9"
-
-      # Named workspaces
-      "ALT, B, workspace, name:B"
-      "ALT, C, workspace, name:C"
-      "ALT, D, workspace, name:D"
-      "ALT, E, workspace, name:E"
-      "ALT, F, workspace, name:F"
-      "ALT, G, workspace, name:G"
-      "ALT, I, workspace, name:I"
-      "ALT, M, workspace, name:M"
-      "ALT, N, workspace, name:N"
-      "ALT, O, workspace, name:O"
-      "ALT, Q, workspace, name:Q"
-      "ALT, R, workspace, name:R"
-      "ALT, S, workspace, name:S"
-      "ALT, T, workspace, name:T"
-      "ALT, U, workspace, name:U"
-      "ALT, X, workspace, name:X"
-      "ALT, Y, workspace, name:Y"
-      "ALT, Z, workspace, name:Z"
+      (bind "ALT + minus" "hl.dsp.window.resize({ x = -50, y = 0, relative = true })")
+      (bind "ALT + equal" "hl.dsp.window.resize({ x = 50, y = 0, relative = true })")
+      (bind "ALT + SHIFT + minus" "hl.dsp.window.resize({ x = 0, y = -50, relative = true })")
+      (bind "ALT + SHIFT + equal" "hl.dsp.window.resize({ x = 0, y = 50, relative = true })")
 
       # Workspace navigation
-      "ALT, comma, workspace, -1"
-      "ALT, period, workspace, +1"
-      "ALT, Tab, workspace, previous"
-      "ALT SHIFT, Tab, movecurrentworkspacetomonitor, +1"
-
-      # Move window to numbered workspace
-      "ALT SHIFT, 1, movetoworkspace, 1"
-      "ALT SHIFT, 2, movetoworkspace, 2"
-      "ALT SHIFT, 3, movetoworkspace, 3"
-      "ALT SHIFT, 4, movetoworkspace, 4"
-      "ALT SHIFT, 5, movetoworkspace, 5"
-      "ALT SHIFT, 6, movetoworkspace, 6"
-      "ALT SHIFT, 7, movetoworkspace, 7"
-      "ALT SHIFT, 8, movetoworkspace, 8"
-      "ALT SHIFT, 9, movetoworkspace, 9"
-
-      # Move window to named workspace
-      "ALT SHIFT, A, movetoworkspace, name:A"
-      "ALT SHIFT, B, movetoworkspace, name:B"
-      "ALT SHIFT, C, movetoworkspace, name:C"
-      "ALT SHIFT, D, movetoworkspace, name:D"
-      "ALT SHIFT, E, movetoworkspace, name:E"
-      "ALT SHIFT, F, movetoworkspace, name:F"
-      "ALT SHIFT, G, movetoworkspace, name:G"
-      "ALT SHIFT, I, movetoworkspace, name:I"
-      "ALT SHIFT, M, movetoworkspace, name:M"
-      "ALT SHIFT, N, movetoworkspace, name:N"
-      "ALT SHIFT, O, movetoworkspace, name:O"
-      "ALT SHIFT, P, movetoworkspace, name:P"
-      "ALT SHIFT, Q, movetoworkspace, name:Q"
-      "ALT SHIFT, R, movetoworkspace, name:R"
-      "ALT SHIFT, S, movetoworkspace, name:S"
-      "ALT SHIFT, T, movetoworkspace, name:T"
-      "ALT SHIFT, U, movetoworkspace, name:U"
-      "ALT SHIFT, V, movetoworkspace, name:V"
-      "ALT SHIFT, W, movetoworkspace, name:W"
-      "ALT SHIFT, X, movetoworkspace, name:X"
-      "ALT SHIFT, Y, movetoworkspace, name:Y"
-      "ALT SHIFT, Z, movetoworkspace, name:Z"
+      (bind "ALT + comma" ''hl.dsp.focus({ workspace = "-1" })'')
+      (bind "ALT + period" ''hl.dsp.focus({ workspace = "+1" })'')
+      (bind "ALT + Tab" ''hl.dsp.focus({ workspace = "previous" })'')
+      (bind "ALT + SHIFT + Tab" ''hl.dsp.workspace.move({ monitor = "+1" })'')
 
       # Special workspace
-      "ALT, grave, togglespecialworkspace, magic"
-      "ALT SHIFT, grave, movetoworkspace, special:magic"
+      (bind "ALT + grave" ''hl.dsp.workspace.toggle_special("magic")'')
+      (bind "ALT + SHIFT + grave" ''hl.dsp.window.move({ workspace = "special:magic" })'')
 
       # Launch submap
-      "ALT, A, submap, launch"
+      (bind "ALT + A" ''hl.dsp.submap("launch")'')
 
       # Mouse scroll workspaces
-      "ALT, mouse_down, workspace, e+1"
-      "ALT, mouse_up, workspace, e-1"
+      (bind "ALT + mouse_down" ''hl.dsp.focus({ workspace = "e+1" })'')
+      (bind "ALT + mouse_up" ''hl.dsp.focus({ workspace = "e-1" })'')
 
       # Screenshots
-      ", PRINT, exec, hyprshot -m region"
-      "SHIFT, PRINT, exec, hyprshot -m window"
-      "CTRL, PRINT, exec, hyprshot -m output"
-      "ALT, PRINT, exec, hyprpicker -a"
+      (bind "PRINT" ''hl.dsp.exec_cmd("hyprshot -m region")'')
+      (bind "SHIFT + PRINT" ''hl.dsp.exec_cmd("hyprshot -m window")'')
+      (bind "CTRL + PRINT" ''hl.dsp.exec_cmd("hyprshot -m output")'')
+      (bind "ALT + PRINT" ''hl.dsp.exec_cmd("hyprpicker -a")'')
 
       # Clipse clipboard
-      "CTRL ALT, V, exec, ghostty --class clipse -e clipse"
-    ];
+      (bind "CTRL + ALT + V" ''hl.dsp.exec_cmd("ghostty --class=app.clipse -e clipse")'')
+    ]
+    # Vim-style focus
+    ++ (lib.mapAttrsToList (
+      key: dir: bind "ALT + ${key}" ''hl.dsp.focus({ direction = "${dir}" })''
+    ) directions)
 
-    bindm = [
-      "ALT, mouse:272, movewindow"
-      "ALT, mouse:273, resizewindow"
-    ];
+    # Vim-style move window
+    ++ (lib.mapAttrsToList (
+      key: dir: bind "ALT + SHIFT + ${key}" ''hl.dsp.window.move({ direction = "${dir}" })''
+    ) directions)
 
-    bindel = [
-      ",XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"
-      ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-      ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-      ",XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-      ",XF86MonBrightnessUp, exec, brightnessctl -e4 -n2 set 5%+"
-      ",XF86MonBrightnessDown, exec, brightnessctl -e4 -n2 set 5%-"
-    ];
+    # Numbered workspaces
+    ++ (map (n: bind "ALT + ${toString n}" "hl.dsp.focus({ workspace = ${toString n} })") numbered)
 
-    bindl = [
-      ", XF86AudioNext, exec, playerctl next"
-      ", XF86AudioPause, exec, playerctl play-pause"
-      ", XF86AudioPlay, exec, playerctl play-pause"
-      ", XF86AudioPrev, exec, playerctl previous"
+    # Named workspaces
+    ++ (map (w: bind "ALT + ${w}" ''hl.dsp.focus({ workspace = "name:${w}" })'') focusNamed)
+
+    # Move window to numbered workspace
+    ++ (map (
+      n: bind "ALT + SHIFT + ${toString n}" "hl.dsp.window.move({ workspace = ${toString n} })"
+    ) numbered)
+
+    # Move window to named workspace
+    ++ (map (
+      w: bind "ALT + SHIFT + ${w}" ''hl.dsp.window.move({ workspace = "name:${w}" })''
+    ) moveNamed)
+
+    # Lua has no bindm/bindel/bindl variants -- they are all hl.bind with an
+    # options table.
+    ++ [
+      (bindWith "ALT + mouse:272" "hl.dsp.window.drag()" mouse)
+      (bindWith "ALT + mouse:273" "hl.dsp.window.resize()" mouse)
+    ]
+    ++ [
+      (bindWith "XF86AudioRaiseVolume"
+        ''hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+")'' lockedRepeat
+      )
+      (bindWith "XF86AudioLowerVolume" ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")''
+        lockedRepeat
+      )
+      (bindWith "XF86AudioMute" ''hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")''
+        locked
+      )
+      (bindWith "XF86AudioMicMute" ''hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle")''
+        locked
+      )
+      (bindWith "XF86MonBrightnessUp" ''hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+")'' lockedRepeat)
+      (bindWith "XF86MonBrightnessDown" ''hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-")''
+        lockedRepeat
+      )
+    ]
+    ++ [
+      (bindWith "XF86AudioNext" ''hl.dsp.exec_cmd("playerctl next")'' locked)
+      (bindWith "XF86AudioPause" ''hl.dsp.exec_cmd("playerctl play-pause")'' locked)
+      (bindWith "XF86AudioPlay" ''hl.dsp.exec_cmd("playerctl play-pause")'' locked)
+      (bindWith "XF86AudioPrev" ''hl.dsp.exec_cmd("playerctl previous")'' locked)
     ];
   };
 
-  wayland.windowManager.hyprland.extraConfig = ''
-    submap = launch
-    bind = , a, exec, hyprctl dispatch submap reset && $webapp=https://chatgpt.com
-    bind = , b, exec, hyprctl dispatch submap reset && $browser
-    bind = , c, exec, hyprctl dispatch submap reset && $webapp=https://app.hey.com/calendar/weeks/
-    bind = , d, exec, hyprctl dispatch submap reset && $terminal -e lazydocker
-    bind = , e, exec, hyprctl dispatch submap reset && $webapp=https://app.hey.com
-    bind = , f, exec, hyprctl dispatch submap reset && $fileManager
-    bind = , g, exec, hyprctl dispatch submap reset && $messenger
-    bind = SHIFT, g, exec, hyprctl dispatch submap reset && $webapp=https://web.whatsapp.com/
-    bind = , m, exec, hyprctl dispatch submap reset && $music
-    bind = , p, exec, hyprctl dispatch submap reset && $passwordManager
-    bind = , t, exec, hyprctl dispatch submap reset && $terminal -e btop
-    bind = , y, exec, hyprctl dispatch submap reset && $webapp=https://youtube.com/
-    bind = , k, exec, hyprctl dispatch submap reset && ~/.local/share/nix-config/bin/show-keybindings
-    bind = SHIFT, t, exec, hyprctl dispatch submap reset && ~/.local/share/nix-config/bin/show-themes
-    bind = , escape, submap, reset
-    submap = reset
-  '';
+  # onDispatch = "reset" leaves the submap after any dispatch, which replaces
+  # the old "hyprctl dispatch submap reset && ..." prefix on every entry.
+  wayland.windowManager.hyprland.submaps.launch = {
+    onDispatch = "reset";
+    settings.bind = (lib.mapAttrsToList (
+      key: cmd: bind key "hl.dsp.exec_cmd(${cmd})"
+    ) launchEntries)
+    ++ [ (bind "escape" ''hl.dsp.submap("reset")'') ];
+  };
 }

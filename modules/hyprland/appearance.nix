@@ -6,85 +6,179 @@ let
 
   inactiveBorder = hexToRgba config.colorScheme.palette.base03 "aa";
   activeBorder = hexToRgba config.colorScheme.palette.base0D "aa";
+
+  # hl.curve(name, spec) -- replaces the old "name,x1,y1,x2,y2" bezier strings.
+  mkBezier = name: p1: p2: {
+    _args = [
+      name
+      {
+        type = "bezier";
+        points = [
+          p1
+          p2
+        ];
+      }
+    ];
+  };
 in
 {
   wayland.windowManager.hyprland.settings = {
-    general = {
-      gaps_in = 5;
-      gaps_out = 10;
+    config = [
+      {
+        general = {
+          gaps_in = 5;
+          gaps_out = 10;
 
-      border_size = 2;
+          border_size = 2;
 
-      "col.active_border" = activeBorder;
-      "col.inactive_border" = inactiveBorder;
+          col = {
+            active_border = activeBorder;
+            inactive_border = inactiveBorder;
+          };
 
-      resize_on_border = false;
+          resize_on_border = false;
 
-      allow_tearing = false;
+          allow_tearing = false;
 
-      layout = "dwindle";
-    };
+          layout = "dwindle";
+        };
 
-    decoration = {
-      rounding = 4;
+        decoration = {
+          rounding = 4;
 
-      shadow = {
-        enabled = false;
-        range = 30;
-        render_power = 3;
-        color = "rgba(00000045)";
-      };
+          shadow = {
+            enabled = false;
+            range = 30;
+            render_power = 3;
+            color = "rgba(00000045)";
+          };
 
-      blur = {
+          blur = {
+            enabled = true;
+            size = 5;
+            passes = 2;
+
+            vibrancy = 0.1696;
+          };
+        };
+
+        animations = {
+          enabled = true;
+        };
+
+        dwindle = {
+          preserve_split = true;
+          force_split = 2;
+        };
+
+        master = {
+          new_status = "master";
+        };
+
+        misc = {
+          disable_hyprland_logo = true;
+          disable_splash_rendering = true;
+        };
+      }
+    ];
+
+    # "curve" is in importantPrefixes, so these are emitted before the
+    # hl.animation calls that reference them.
+    curve = [
+      (mkBezier "easeOutQuint" [ 0.23 1 ] [ 0.32 1 ])
+      (mkBezier "easeInOutCubic" [ 0.65 0.05 ] [ 0.36 1 ])
+      (mkBezier "linear" [ 0 0 ] [ 1 1 ])
+      (mkBezier "almostLinear" [ 0.5 0.5 ] [ 0.75 1.0 ])
+      (mkBezier "quick" [ 0.15 0 ] [ 0.1 1 ])
+    ];
+
+    animation = [
+      {
+        leaf = "global";
         enabled = true;
-        size = 5;
-        passes = 2;
-
-        vibrancy = 0.1696;
-      };
-    };
-
-    animations = {
-      enabled = true;
-
-      bezier = [
-        "easeOutQuint,0.23,1,0.32,1"
-        "easeInOutCubic,0.65,0.05,0.36,1"
-        "linear,0,0,1,1"
-        "almostLinear,0.5,0.5,0.75,1.0"
-        "quick,0.15,0,0.1,1"
-      ];
-
-      animation = [
-        "global, 1, 10, default"
-        "border, 1, 5.39, easeOutQuint"
-        "windows, 1, 4.79, easeOutQuint"
-        "windowsIn, 1, 4.1, easeOutQuint, popin 87%"
-        "windowsOut, 1, 1.49, linear, popin 87%"
-        "fadeIn, 1, 1.73, almostLinear"
-        "fadeOut, 1, 1.46, almostLinear"
-        "fade, 1, 3.03, quick"
-        "layers, 1, 3.81, easeOutQuint"
-        "layersIn, 1, 4, easeOutQuint, fade"
-        "layersOut, 1, 1.5, linear, fade"
-        "fadeLayersIn, 1, 1.79, almostLinear"
-        "fadeLayersOut, 1, 1.39, almostLinear"
-        "workspaces, 0, 0, ease"
-      ];
-    };
-
-    dwindle = {
-      preserve_split = true;
-      force_split = 2;
-    };
-
-    master = {
-      new_status = "master";
-    };
-
-    misc = {
-      disable_hyprland_logo = true;
-      disable_splash_rendering = true;
-    };
+        speed = 10;
+        bezier = "default";
+      }
+      {
+        leaf = "border";
+        enabled = true;
+        speed = 5.39;
+        bezier = "easeOutQuint";
+      }
+      {
+        leaf = "windows";
+        enabled = true;
+        speed = 4.79;
+        bezier = "easeOutQuint";
+      }
+      {
+        leaf = "windowsIn";
+        enabled = true;
+        speed = 4.1;
+        bezier = "easeOutQuint";
+        style = "popin 87%";
+      }
+      {
+        leaf = "windowsOut";
+        enabled = true;
+        speed = 1.49;
+        bezier = "linear";
+        style = "popin 87%";
+      }
+      {
+        leaf = "fadeIn";
+        enabled = true;
+        speed = 1.73;
+        bezier = "almostLinear";
+      }
+      {
+        leaf = "fadeOut";
+        enabled = true;
+        speed = 1.46;
+        bezier = "almostLinear";
+      }
+      {
+        leaf = "fade";
+        enabled = true;
+        speed = 3.03;
+        bezier = "quick";
+      }
+      {
+        leaf = "layers";
+        enabled = true;
+        speed = 3.81;
+        bezier = "easeOutQuint";
+      }
+      {
+        leaf = "layersIn";
+        enabled = true;
+        speed = 4;
+        bezier = "easeOutQuint";
+        style = "fade";
+      }
+      {
+        leaf = "layersOut";
+        enabled = true;
+        speed = 1.5;
+        bezier = "linear";
+        style = "fade";
+      }
+      {
+        leaf = "fadeLayersIn";
+        enabled = true;
+        speed = 1.79;
+        bezier = "almostLinear";
+      }
+      {
+        leaf = "fadeLayersOut";
+        enabled = true;
+        speed = 1.39;
+        bezier = "almostLinear";
+      }
+      {
+        leaf = "workspaces";
+        enabled = false;
+      }
+    ];
   };
 }

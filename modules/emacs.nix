@@ -21,6 +21,7 @@
     nixfmt
 
     # doom golang
+    go
     gopls
     gomodifytags
     gotests

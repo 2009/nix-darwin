@@ -17,6 +17,8 @@ let
   foregroundMutedRgb = "rgb(${convert ", " palette.base04})";
 in
 {
+  home.packages = [ pkgs.nerd-fonts.caskaydia-mono ];
+
   programs.hyprlock = {
     enable = true;
     settings = {

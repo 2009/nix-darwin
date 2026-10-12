@@ -1,10 +1,13 @@
 {
   config,
+  lib,
   pkgs,
   wallpaper ? "1-Pawel-Czerwinski-Abstract-Purple-Blue.jpg",
   ...
 }:
 let
+  inherit (import ./lua-helpers.nix { inherit lib; }) mkHook;
+
   wallpaperPath = "~/Pictures/Wallpapers/${wallpaper}";
 
   # hyprpaper's monitor wildcard doesn't apply wallpaper to monitors previously set
@@ -32,8 +35,10 @@ in
     };
   };
   wayland.windowManager.hyprland.settings = {
-    exec = [
-      "${setWallpaper}"
+    # Replaces the old hyprlang `exec`, which ran on both start and reload.
+    on = map (event: mkHook event [ "${setWallpaper}" ]) [
+      "hyprland.start"
+      "config.reloaded"
     ];
   };
 }

@@ -1,5 +1,7 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
+  home.packages = [ pkgs.nerd-fonts.caskaydia-mono ];
+
   home.file = {
     ".config/wofi/style.css" = {
       text = ''

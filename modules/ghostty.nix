@@ -1,8 +1,10 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   palette = config.colorScheme.palette;
 in
 {
+  home.packages = [ pkgs.nerd-fonts.caskaydia-mono ];
+
   programs.ghostty = {
     enable = true;
     settings = {
@@ -11,7 +13,7 @@ in
       background-opacity = 0.95;
       window-decoration = "none";
 
-      font-family = "Liberation Sans 11";
+      font-family = "CaskaydiaMono Nerd Font Mono";
       font-size = 12;
 
       theme = "omarchy";
