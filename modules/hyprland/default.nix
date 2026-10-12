@@ -58,6 +58,9 @@
 
   gtk = {
     enable = true;
+    # Sets dconf color-scheme = prefer-dark, which the GTK portal reports to
+    # Firefox/Chromium/libadwaita apps as the system dark-mode preference.
+    colorScheme = "dark";
     theme = {
       name = "Adwaita:dark";
       package = pkgs.gnome-themes-extra;
