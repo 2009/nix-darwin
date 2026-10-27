@@ -145,6 +145,12 @@
     # AI
     claude-code
     jq
+    gh
+    bun
+    graphite-cli
+    nodejs
+    tmux
+    (callPackage ../../pkgs/agent-deck.nix { })
 
     # Disk management
     kdePackages.partitionmanager
