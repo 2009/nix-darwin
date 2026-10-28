@@ -151,6 +151,7 @@
     nodejs
     tmux
     (callPackage ../../pkgs/agent-deck.nix { })
+    (callPackage ../../pkgs/qlty.nix { })
 
     # Disk management
     kdePackages.partitionmanager
