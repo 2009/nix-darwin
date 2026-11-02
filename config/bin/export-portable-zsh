@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Export the home-manager zsh config as plain dotfiles for machines without Nix.
+# Usage: export-portable-zsh <home-manager-files> <home-directory> <out-dir>
+set -euo pipefail
+
+home_files=$1
+home_dir=$2
+out=$3
+store_path='/nix/store/[a-z0-9]{32}-[^/"'"'"'\s]+'
+
+rm -rf "$out"
+mkdir -p "$out/.zsh/plugins" "$out/.config"
+
+zshrc=$(grep -v '^HELPDIR=' "$home_files/.zshrc")
+
+cp -rL "$home_files/.zsh/plugins/." "$out/.zsh/plugins/"
+for plugin_share in $(grep -oP "$store_path/share/[^/\"\s]+" <<<"$zshrc" | sort -u); do
+  cp -rL "$plugin_share" "$out/.zsh/plugins/$(basename "$plugin_share")"
+done
+cp -rL "$home_files/.config/zsh-abbr" "$out/.config/"
+cp -L "$home_files/.p10k.zsh" "$out/.p10k.zsh"
+chmod -R u+w "$out"
+
+find "$out/.zsh/plugins" -name '*.orig' -delete
+find "$out/.zsh/plugins" -type f -exec perl -0pi -e \
+  "s|^#!$store_path/bin/|#!/bin/|; s|^\w+=$store_path\S*\n||mg" {} +
+
+perl -pe "s{$store_path/share/}{\\\$HOME/.zsh/plugins/}g; s{$store_path/bin/}{}g; s{\Q$home_dir\E}{\\\$HOME}g" <<<"$zshrc" >"$out/.zshrc"
+
+session_vars=$(grep -oP "$store_path/etc/profile.d/hm-session-vars.sh" "$home_files/.zshenv")
+perl -ne "print unless m{$store_path|/etc/profiles/}" "$session_vars" |
+  perl -pe "s{\Q$home_dir\E}{\\\$HOME}g" >"$out/.zshenv"
+
+{
+  grep -oP "$store_path/bin/\K[\w-]+" <<<"$zshrc" | sort -u | sed 's/.*/brew "&"/'
+  # FZF_CTRL_T_OPTS previews files with bat
+  echo 'brew "bat"'
+} >"$out/Brewfile"
+
+cat >"$out/install.sh" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")"
+
+brew bundle --file=Brewfile
+
+for dotfile in .zshrc .zshenv .p10k.zsh; do
+  [[ -e "$HOME/$dotfile" ]] && cp "$HOME/$dotfile" "$HOME/$dotfile.bak"
+  cp "$dotfile" "$HOME/$dotfile"
+done
+mkdir -p "$HOME/.zsh" "$HOME/.config"
+rm -rf "$HOME/.zsh/plugins" "$HOME/.config/zsh-abbr"
+cp -R .zsh/plugins "$HOME/.zsh/plugins"
+cp -R .config/zsh-abbr "$HOME/.config/zsh-abbr"
+EOF
+chmod +x "$out/install.sh"
+
+if grep -rlP '/nix/store/[a-z0-9]{32}-' "$out"; then
+  echo "Nix store paths remain in the files above" >&2
+  exit 1
+fi

@@ -1,0 +1,5 @@
+brew "direnv"
+brew "fzf"
+brew "rbenv"
+brew "zoxide"
+brew "bat"

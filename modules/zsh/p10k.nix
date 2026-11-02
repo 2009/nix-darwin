@@ -5,13 +5,6 @@ let
 in
 {
   programs.zsh = {
-    plugins = [
-      {
-        name = "powerlevel10k";
-        src = pkgs.zsh-powerlevel10k;
-      }
-    ];
-
     initContent = lib.mkMerge [
       (lib.mkBefore ''
         # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.

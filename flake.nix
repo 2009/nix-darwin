@@ -15,6 +15,7 @@
 
   outputs =
     {
+      self,
       nixpkgs,
       hyprland,
       nix-colors,
@@ -74,5 +75,33 @@
           home-manager.darwinModules.home-manager
         ];
       };
+
+      apps.x86_64-linux.export-portable =
+        let
+          resetti = self.nixosConfigurations.nixos;
+          home = resetti.config.home-manager.users.zenchi;
+          pkgs = resetti.pkgs;
+          aerospace = (import ./modules/darwin/aerospace.nix { inherit pkgs; }).services.aerospace.settings;
+          aerospaceToml = (pkgs.formats.toml { }).generate "aerospace.toml" (
+            aerospace // { start-at-login = true; }
+          );
+        in
+        {
+          type = "app";
+          program = nixpkgs.lib.getExe (
+            pkgs.writeShellApplication {
+              name = "export-portable";
+              runtimeInputs = [ pkgs.perl ];
+              text = ''
+                ${./config/bin/export-portable-zsh} ${home.home-files} ${home.home.homeDirectory} portable/zsh
+
+                rm -rf portable/aerospace
+                mkdir -p portable/aerospace
+                install -m 644 ${aerospaceToml} portable/aerospace/.aerospace.toml
+                printf 'tap "nikitabobko/tap"\ncask "aerospace"\n' >portable/aerospace/Brewfile
+              '';
+            }
+          );
+        };
     };
 }

@@ -1,0 +1,4 @@
+abbr gco='git checkout'
+abbr gd='git diff'
+abbr gst='git status'
+abbr l=less

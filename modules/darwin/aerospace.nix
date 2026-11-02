@@ -51,9 +51,7 @@
         # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
         # You can uncomment the following lines to open up terminal with alt + enter shortcut
         # (like in i3)
-        alt-enter = ''
-          exec-and-forget /Applications/Ghostty.app/Contents/MacOS/ghostty"
-        '';
+        alt-enter = "exec-and-forget /Applications/Ghostty.app/Contents/MacOS/ghostty";
 
         alt-shift-r = ''
           exec-and-forget /Applications/Ghostty.app/Contents/MacOS/ghostty --title="Launcher" -e "launcher"
